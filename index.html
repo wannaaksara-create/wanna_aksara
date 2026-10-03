@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aksara &amp; Cahaya — Portofolio Puisi dan Karya Visual</title>
+<meta name="description" content="Portofolio pribadi karya puisi dan karya visual. Kumpulan bait, galeri gambar, dan cara menghubungi penulis." />
+<meta name="author" content="Nama Anda" />
+<meta property="og:title" content="Aksara & Cahaya — Portofolio Puisi dan Karya Visual" />
+<meta property="og:description" content="Kumpulan puisi dan karya visual dalam satu ruang sunyi." />
+<meta property="og:type" content="website" />
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✒️</text></svg>" />
+
+<!-- ============ FONTS ============ -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<!-- ============ TAILWIND CSS ============ -->
+<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+<style>
+/* ============================================================
+   1. VARIABEL WARNA / TEMA
+   ------------------------------------------------------------
+   Ubah warna tema di sini jika ingin suasana berbeda.
+   Bagian ":root" = tema TERANG, bagian ".dark" = tema GELAP.
+   ============================================================ */
+:root{
+  --paper:#f6f3ed;        /* latar halaman */
+  --panel:#fffdf8;        /* latar kartu */
+  --ink:#1c1a17;          /* warna teks utama */
+  --ink-soft:#5c564d;     /* teks sekunder */
+  --line:#e2dcd1;         /* garis/border */
+  --accent:#a4743c;       /* warna aksen */
+  --accent-soft:#f0e6d7;  /* aksen lembut / latar chip */
+  --shadow:0 18px 40px -22px rgba(60,50,35,.35);
+}
+.dark{
+  --paper:#0f0e0d;
+  --panel:#171614;
+  --ink:#eee8dd;
+  --ink-soft:#a49c92;
+  --line:#2b2823;
+  --accent:#d5a374;
+  --accent-soft:#231f1a;
+  --shadow:0 18px 40px -20px rgba(0,0,0,.75);
+}
+
+/* ============================================================
+   2. KELAS UTILITAS WARNA (dipakai di HTML & JavaScript)
+   ============================================================ */
+.bg-paper{background-color:var(--paper);}
+.bg-panel{background-color:var(--panel);}
+.text-ink{color:var(--ink);}
+.text-soft{color:var(--ink-soft);}
+.text-accent{color:var(--accent);}
+.bg-accent{background-color:var(--accent);}
+.border-line{border-color:var(--line);}
+.ring-line{box-shadow:inset 0 0 0 1px var(--line);}
+.font-display{font-family:'Cormorant Garamond',Georgia,serif;}
+.font-body{font-family:'Inter',system-ui,-apple-system,sans-serif;}
+.font-mono2{font-family:'JetBrains Mono',ui-monospace,monospace;}
+
+html{scroll-behavior:smooth;}
+body{
+  background-color:var(--paper);
+  color:var(--ink);
+  font-family:'Inter',system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  transition:background-color .4s ease,color .4s ease;
+}
+section{scroll-margin-top:84px;}
+
+/* header saat halaman digulir */
+#header-inner.header-scrolled{
+  background-color:color-mix(in srgb, var(--panel) 88%, transparent);
+  backdrop-filter:blur(14px);
+  -webkit-backdrop-filter:blur(14px);
+  border-bottom-color:var(--line);
+}
+
+/* tekstur kertas halus */
+.grain::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.035;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* animasi muncul saat discroll */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .8s cubic-bezier(.22,.61,.36,1),transform .8s cubic-bezier(.22,.61,.36,1);}
+.reveal.is-visible{opacity:1;transform:none;}
+
+/* kartu puisi */
+.poem-card{transition:transform .45s cubic-bezier(.22,.61,.36,1),box-shadow .45s ease,border-color .45s ease;}
+.poem-card:hover{transform:translateY(-6px);box-shadow:var(--shadow);border-color:var(--accent);}
+.poem-card .poem-cover{transition:transform .8s cubic-bezier(.22,.61,.36,1),filter .6s ease;}
+.poem-card:hover .poem-cover{transform:scale(1.06);}
+
+/* kartu gambar galeri */
+.art-item img{transition:transform 1.1s cubic-bezier(.22,.61,.36,1),filter .6s ease;}
+.art-item:hover img{transform:scale(1.07);}
+
+/* tinta garis bawah pada link */
+.link-ink{position:relative;}
+.link-ink::after{content:"";position:absolute;left:0;bottom:-4px;height:1px;width:0;background:var(--accent);transition:width .35s ease;}
+.link-ink:hover::after,.link-ink.active::after{width:100%;}
+
+/* huruf pembuka besar pada bio */
+.dropcap::first-letter{
+  float:left;font-family:'Cormorant Garamond',serif;font-size:3.4rem;line-height:.82;
+  padding:.12em .12em 0 0;color:var(--accent);font-weight:500;
+}
+
+/* bait puisi */
+.bait p{margin:0;}
+.bait + .bait{margin-top:1.5rem;}
+
+/* scrollbar halus */
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--line);border-radius:99px;}
+::selection{background:var(--accent);color:#fff;}
+
+/* util */
+.line-clamp-3{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.fade-in{animation:fadeIn .35s ease both;}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.pop-in{animation:popIn .4s cubic-bezier(.22,.61,.36,1) both;}
+@keyframes popIn{from{opacity:0;transform:translateY(16px) scale(.985)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+
+<!-- ==========================================================================
+     PANDUAN SINGKAT DI DALAM KODE (baca juga penjelasan di bawah file)
+     1) Semua konten (bio, puisi, gambar, sosial media) ADA DI BAGIAN <script>
+        paling bawah, pada objek bernama "SITE". Cukup edit di situ.
+     2) Untuk menambah puisi  -> salin satu blok { ... } di dalam SITE.puisi
+     3) Untuk menambah gambar -> salin satu blok { ... } di dalam SITE.galeri
+     4) Ganti URL gambar placeholder dengan foto milik Anda, contoh:
+        "images/puisi-1.jpg"  (letakkan file di folder "images" sejajar index.html)
+     ========================================================================== -->
+
+<body class="grain antialiased font-body">
+
+<!-- ======================= HEADER / NAVIGASI ======================= -->
+<header id="site-header" class="fixed top-0 left-0 right-0 z-40 transition-all duration-500">
+  <div class="mx-auto max-w-6xl px-5 sm:px-8">
+    <div id="header-inner" class="flex items-center justify-between py-5 transition-all duration-500 border-b border-transparent">
+      <!-- Nama / judul website (diambil dari SITE.profil.nama via JavaScript) -->
+      <a href="#beranda" class="group flex items-center gap-3">
+        <span id="logo-inisial" class="h-8 w-8 rounded-full border border-line grid place-items-center text-accent font-display text-lg leading-none">A</span>
+        <span class="font-display text-xl sm:text-2xl tracking-wide" data-bind="nama">—</span>
+      </a>
+
+      <!-- Nav desktop -->
+      <nav class="hidden md:flex items-center gap-8 text-[13px] uppercase tracking-[0.18em] text-soft">
+        <a href="#tentang" class="nav-link link-ink hover:text-ink transition">Tentang</a>
+        <a href="#puisi" class="nav-link link-ink hover:text-ink transition">Puisi</a>
+        <a href="#galeri" class="nav-link link-ink hover:text-ink transition">Gambar</a>
+        <a href="#kontak" class="nav-link link-ink hover:text-ink transition">Kontak</a>
+        <button id="theme-toggle" aria-label="Ganti tema terang/gelap"
+          class="h-9 w-9 grid place-items-center rounded-full border border-line hover:border-accent hover:text-accent transition">
+          <span id="theme-icon" class="text-base">☾</span>
+        </button>
+      </nav>
+
+      <!-- Tombol mobile -->
+      <div class="flex md:hidden items-center gap-2">
+        <button id="theme-toggle-m" aria-label="Ganti tema"
+          class="h-9 w-9 grid place-items-center rounded-full border border-line"><span class="theme-icon-m text-base">☾</span></button>
+        <button id="menu-btn" aria-label="Buka menu" class="h-9 w-9 grid place-items-center rounded-full border border-line">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Menu mobile overlay -->
+<div id="mobile-menu" class="fixed inset-0 z-50 hidden">
+  <div class="absolute inset-0 bg-black/50 backdrop-blur-sm" data-close-menu></div>
+  <div class="absolute top-0 right-0 h-full w-[78%] max-w-xs bg-panel border-l border-line p-7 flex flex-col">
+    <div class="flex items-center justify-between mb-10">
+      <span class="font-display text-xl">Menu</span>
+      <button data-close-menu class="h-9 w-9 grid place-items-center rounded-full border border-line" aria-label="Tutup menu">✕</button>
+    </div>
+    <nav class="flex flex-col gap-6 font-display text-3xl">
+      <a href="#tentang" class="mobile-link hover:text-accent transition">Tentang</a>
+      <a href="#puisi" class="mobile-link hover:text-accent transition">Puisi</a>
+      <a href="#galeri" class="mobile-link hover:text-accent transition">Gambar</a>
+      <a href="#kontak" class="mobile-link hover:text-accent transition">Kontak</a>
+    </nav>
+    <div class="mt-auto text-xs text-soft leading-relaxed" data-bind="footerNote"></div>
+  </div>
+</div>
+
+<main class="relative z-10">
+
+<!-- ======================= HERO ======================= -->
+<section id="beranda" class="relative overflow-hidden pt-32 pb-20 sm:pt-40 sm:pb-28">
+  <div class="mx-auto max-w-6xl px-5 sm:px-8">
+    <div class="grid md:grid-cols-12 gap-10 md:gap-8 items-center">
+      <div class="md:col-span-7">
+        <p class="text-[11px] uppercase tracking-[0.3em] text-accent mb-6 reveal" data-bind="heroKicker">—</p>
+        <h1 class="font-display font-light leading-[1.02] text-[13vw] sm:text-6xl md:text-7xl lg:text-[5.2rem] reveal">
+          <span data-bind="heroBaris1">—</span><br>
+          <span class="italic text-soft" data-bind="heroBaris2">—</span>
+        </h1>
+        <p class="mt-8 max-w-xl text-soft leading-relaxed text-[15px] sm:text-base reveal" data-bind="heroDeskripsi">—</p>
+        <div class="mt-10 flex flex-wrap items-center gap-4 reveal">
+          <a href="#puisi" class="px-7 py-3.5 rounded-full bg-accent text-white text-[12px] uppercase tracking-[0.2em] hover:opacity-90 transition shadow-lg shadow-black/10">Baca Puisi</a>
+          <a href="#galeri" class="px-7 py-3.5 rounded-full border border-line text-[12px] uppercase tracking-[0.2em] hover:border-accent hover:text-accent transition">Lihat Galeri</a>
+        </div>
+      </div>
+
+      <div class="md:col-span-5 reveal">
+        <div class="relative">
+          <div class="absolute -top-5 -left-5 w-full h-full border border-line rounded-[2rem]"></div>
+          <img id="hero-photo" alt="Foto penulis" loading="lazy"
+               class="relative w-full aspect-[4/5] object-cover rounded-[2rem] ring-line" />
+          <div class="absolute -bottom-6 left-6 right-6 sm:left-8 sm:right-auto bg-panel border border-line rounded-2xl p-4 sm:p-5 shadow-lg" style="box-shadow:var(--shadow)">
+            <p class="font-display italic text-lg leading-snug" data-bind="heroKutipan">—</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= TENTANG ======================= -->
+<section id="tentang" class="py-20 sm:py-28 border-t border-line">
+  <div class="mx-auto max-w-6xl px-5 sm:px-8">
+    <div class="flex items-end justify-between gap-6 mb-12 reveal">
+      <div>
+        <p class="text-[11px] uppercase tracking-[0.3em] text-accent mb-3">01 — Tentang Saya</p>
+        <h2 class="font-display font-light text-4xl sm:text-5xl" data-bind="tentangJudul">—</h2>
+      </div>
+      <span class="hidden sm:block font-display italic text-soft text-lg" data-bind="tentangSub">—</span>
+    </div>
+
+    <div class="grid md:grid-cols-12 gap-10">
+      <div class="md:col-span-5 reveal">
+        <img id="profil-photo" alt="Foto profil" loading="lazy"
+             class="w-full aspect-[4/5] object-cover rounded-[1.5rem] ring-line" />
+        <div class="mt-6 grid grid-cols-3 gap-4 text-center" id="stat-wrap"><!-- diisi JavaScript --></div>
+      </div>
+      <div class="md:col-span-7 space-y-6">
+        <h3 class="font-display text-3xl sm:text-4xl leading-tight reveal" data-bind="profilSapaan">—</h3>
+        <p class="text-soft leading-[1.9] dropcap reveal" data-bind="profilBio">—</p>
+        <div class="border-l-2 pl-6 py-2 reveal" style="border-color:var(--accent)">
+          <p class="font-display italic text-xl sm:text-2xl leading-relaxed" data-bind="sambutan">—</p>
+          <p class="mt-4 text-[11px] uppercase tracking-[0.25em] text-soft" data-bind="sambutanPenanda">—</p>
+        </div>
+        <div id="fakta-wrap" class="grid sm:grid-cols-2 gap-4 pt-2"><!-- diisi JavaScript --></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======================= GALERI PUISI ======================= -->
+<section id="puisi" class="py-20 sm:py-28 border-t border-line">
+  <div class="mx-auto max-w-6xl px-5 sm:px-8">
+    <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 reveal">
+      <div>
+        <p class="text-[11px] uppercase tracking-[0.3em] text-accent mb-3">02 — Galeri Puisi</p>
+        <h2 class="font-display font-light text-4xl sm:text-5xl">Kumpulan <span class="italic text-soft">Bait</span></h2>
+        <p class="mt-4 max-w-lg text-soft text-[15px] leading-relaxed">Klik salah satu kartu untuk membaca puisi secara utuh, bait demi bait, dalam mode fokus.</p>
+      </div>
+      <div class="relative w-full md:w-72">
+        <input id="search-puisi" type="search" placeholder="Cari judul atau kata…"
+          class="w-full bg-panel border border-line rounded-full px-5 py-3 text-sm outline-none focus:border-accent transition" />
+      </div>
+    </div>
+
+    <!-- filter tag (dibuat otomatis dari data puisi) -->
+    <div id="tag-wrap" class="flex flex-wrap gap-2 mb-10 reveal"></div>
+
+    <!-- daftar kartu puisi -->
+    <div id="puisi-grid" class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7"></div>
+    <p id="puisi-kosong" class="hidden text-center text-soft py-16 font-display italic text-xl">Belum ada puisi yang cocok dengan pencarian.</p>
+  </div>
+</section>
+
+<!-- ======================= GALERI GAMBAR ======================= -->
+<section id="galeri" class="py-20 sm:py-28 border-t border-line">
+  <div class="mx-auto max-w-6xl px-5 sm:px-8">
+    <div class="mb-10 reveal">
+      <p class="text-[11px] uppercase tracking-[0.3em] text-accent mb-3">03 — Galeri Gambar</p>
+      <h2 class="font-display font-light text-4xl sm:text-5xl">Karya <span class="italic text-soft">Visual</span></h2>
+      <p class="mt-4 max-w-lg text-soft text-[15px] leading-relaxed">Catatan warna, tekstur, dan cahaya. Klik gambar untuk melihat ukuran penuh beserta catatannya.</p>
+    </div>
+    <div id="galeri-grid" class="grid grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-5"></div>
+  </div>
+</section>
+
+<!-- ======================= KONTAK ======================= -->
+<section id="kontak" class="py-20 sm:py-28 border-t border-line">
+  <div class="mx-auto max-w-6xl px-5 sm:px-8">
+    <div class="grid md:grid-cols-12 gap-12">
+      <div class="md:col-span-5 reveal">
+        <p class="text-[11px] uppercase tracking-[0.3em] text-accent mb-3">04 — Kontak</p>
+        <h2 class="font-display font-light text-4xl sm:text-5xl leading-tight">Mari berbincang<br><span class="italic text-soft">tentang kata.</span></h2>
+        <p class="mt-6 text-soft leading-[1.9]" data-bind="kontakDeskripsi">—</p>
+
+        <div id="sosial-wrap" class="mt-10 space-y-3"></div>
+      </div>
+
+      <div class="md:col-span-7 reveal">
+        <div class="bg-panel border border-line rounded-[1.5rem] p-6 sm:p-9" style="box-shadow:var(--shadow)">
+          <h3 class="font-display text-2xl mb-1">Kirim Pesan</h3>
+          <p class="text-xs text-soft mb-7" id="form-catatan"></p>
+          <form id="contact-form" class="space-y-5" novalidate>
+            <div class="grid sm:grid-cols-2 gap-5">
+              <label class="block">
+                <span class="text-[11px] uppercase tracking-[0.2em] text-soft">Nama</span>
+                <input name="nama" required type="text" placeholder="Nama Anda"
+                  class="mt-2 w-full bg-transparent border-b border-line py-3 outline-none focus:border-accent transition" />
+              </label>
+              <label class="block">
+                <span class="text-[11px] uppercase tracking-[0.2em] text-soft">Email</span>
+                <input name="email" required type="email" placeholder="nama@email.com"
+                  class="mt-2 w-full bg-transparent border-b border-line py-3 outline-none focus:border-accent transition" />
+              </label>
+            </div>
+            <label class="block">
+              <span class="text-[11px] uppercase tracking-[0.2em] text-soft">Subjek</span>
+              <input name="subjek" type="text" placeholder="Tentang apa pesan ini?"
+                class="mt-2 w-full bg-transparent border-b border-line py-3 outline-none focus:border-accent transition" />
+            </label>
+            <label class="block">
+              <span class="text-[11px] uppercase tracking-[0.2em] text-soft">Pesan</span>
+              <textarea name="pesan" required rows="5" placeholder="Tulis pesan Anda di sini…"
+                class="mt-2 w-full bg-transparent border-b border-line py-3 outline-none focus:border-accent transition resize-y"></textarea>
+            </label>
+            <div class="flex flex-wrap items-center gap-4 pt-2">
+              <button type="submit"
+                class="px-8 py-3.5 rounded-full bg-accent text-white text-[12px] uppercase tracking-[0.2em] hover:opacity-90 transition">Kirim Pesan</button>
+              <p id="form-status" class="text-sm text-soft"></p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ======================= FOOTER ======================= -->
+<footer class="border-t border-line py-12">
+  <div class="mx-auto max-w-6xl px-5 sm:px-8">
+    <div class="flex flex-col sm:flex-row items-center justify-between gap-6 text-center sm:text-left">
+      <div>
+        <p class="font-display text-2xl" data-bind="nama">—</p>
+        <p class="text-xs text-soft mt-2" data-bind="footerNote">—</p>
+      </div>
+      <div class="flex items-center gap-6 text-[11px] uppercase tracking-[0.2em] text-soft">
+        <a href="#puisi" class="hover:text-accent transition">Puisi</a>
+        <a href="#galeri" class="hover:text-accent transition">Gambar</a>
+        <a href="#kontak" class="hover:text-accent transition">Kontak</a>
+      </div>
+    </div>
+    <div class="mt-10 pt-6 border-t border-line flex flex-col sm:flex-row items-center justify-between gap-3 text-[11px] text-soft tracking-wide">
+      <p id="copyright">—</p>
+      <p>Dibuat dengan hati-hati · <span class="font-display italic">Aksara &amp; Cahaya</span></p>
+    </div>
+  </div>
+</footer>
+
+<!-- ======================= MODAL PUISI ======================= -->
+<div id="modal-puisi" class="fixed inset-0 z-[60] hidden">
+  <div class="absolute inset-0 bg-black/70 backdrop-blur-md" data-close-modal></div>
+  <div class="relative h-full w-full flex items-start sm:items-center justify-center p-4 sm:p-8 overflow-y-auto">
+    <article class="pop-in w-full max-w-2xl bg-panel border border-line rounded-[1.5rem] overflow-hidden my-auto" style="box-shadow:var(--shadow)">
+      <div class="relative h-44 sm:h-56 overflow-hidden">
+        <img id="modal-cover" alt="" class="w-full h-full object-cover" />
+        <div class="absolute inset-0" style="background:linear-gradient(to top,var(--panel),transparent 65%)"></div>
+        <button data-close-modal class="absolute top-4 right-4 h-10 w-10 grid place-items-center rounded-full bg-black/40 text-white hover:bg-black/70 transition" aria-label="Tutup">✕</button>
+      </div>
+      <div class="px-6 sm:px-10 pb-10 -mt-10 relative">
+        <p class="text-[11px] uppercase tracking-[0.25em] text-accent" id="modal-meta">—</p>
+        <h3 class="font-display font-light text-3xl sm:text-4xl mt-2 mb-6 leading-tight" id="modal-judul">—</h3>
+        <div id="modal-isi" class="font-display text-[1.15rem] sm:text-xl leading-[2] text-center"></div>
+        <div class="mt-10 pt-6 border-t border-line flex items-center justify-between gap-4">
+          <p class="text-xs text-soft italic" id="modal-penutup">—</p>
+          <div class="flex gap-2">
+            <button id="btn-salin" class="px-4 py-2 rounded-full border border-line text-[11px] uppercase tracking-[0.15em] hover:border-accent hover:text-accent transition">Salin</button>
+            <button data-close-modal class="px-4 py-2 rounded-full border border-line text-[11px] uppercase tracking-[0.15em] hover:border-accent hover:text-accent transition">Tutup</button>
+          </div>
+        </div>
+      </div>
+    </article>
+  </div>
+</div>
+
+<!-- ======================= LIGHTBOX GAMBAR ======================= -->
+<div id="lightbox" class="fixed inset-0 z-[60] hidden">
+  <div class="absolute inset-0 bg-black/92 backdrop-blur-sm" data-close-lightbox></div>
+  <div class="relative h-full w-full flex flex-col">
+    <div class="flex items-center justify-between px-5 sm:px-8 py-4 text-white/80">
+      <p class="text-[11px] uppercase tracking-[0.25em]" id="lb-counter">—</p>
+      <button data-close-lightbox class="h-10 w-10 grid place-items-center rounded-full border border-white/25 hover:bg-white/10 transition" aria-label="Tutup">✕</button>
+    </div>
+    <div class="flex-1 min-h-0 flex items-center justify-center px-4 sm:px-16 relative">
+      <button id="lb-prev" aria-label="Sebelumnya" class="absolute left-2 sm:left-6 h-11 w-11 grid place-items-center rounded-full border border-white/25 text-white/80 hover:bg-white/10 transition">‹</button>
+      <img id="lb-img" alt="" class="max-h-[70vh] max-w-full object-contain rounded-xl fade-in" />
+      <button id="lb-next" aria-label="Berikutnya" class="absolute right-2 sm:right-6 h-11 w-11 grid place-items-center rounded-full border border-white/25 text-white/80 hover:bg-white/10 transition">›</button>
+    </div>
+    <div class="px-6 sm:px-10 pb-8 pt-4 text-center max-w-2xl mx-auto">
+      <h4 class="font-display text-2xl text-white" id="lb-judul">—</h4>
+      <p class="text-sm text-white/60 mt-2 leading-relaxed" id="lb-deskripsi">—</p>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ==================================================================================
+   ★★★  BAGIAN EDIT KONTEN — CUKUP UBAH DI SINI  ★★★
+   ---------------------------------------------------------------------------------
+   Semua tulisan, puisi, dan gambar pada website ini diambil dari objek "SITE"
+   di bawah. Anda TIDAK perlu menyentuh kode HTML/CSS untuk mengubah isi website.
+
+   ATURAN PENULISAN:
+   • Teks      : di dalam tanda kutip "..."  (atau '...'). Jangan lupa koma di akhir.
+   • Baris baru: untuk bio/sambutan gunakan \n agar turun baris.
+   • Gambar    : boleh URL internet (https://...) ATAU file lokal, contoh:
+                 "images/puisi-1.jpg"  → buat folder "images" sejajar index.html
+                 dan letakkan file di dalamnya.
+   ================================================================================== */
+
+const SITE = {
+
+  /* ---------- 1. PROFIL & HERO ---------- */
+  profil: {
+    nama            : "Rani Aksara",                     // ← ganti dengan nama Anda
+    peran           : "Penulis Puisi · Kreator Visual",
+    lokasi          : "Bandung, Indonesia",
+    fotoHero        : "https://images.pexels.com/photos/6980546/pexels-photo-6980546.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=800",
+    fotoProfil      : "https://images.pexels.com/photos/17125133/pexels-photo-17125133.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=1200&w=800",
+    heroKicker      : "Portofolio Karya 2026",
+    heroBaris1      : "Menulis ruang",
+    heroBaris2      : "antara hujan dan kata.",
+    heroDeskripsi   : "Selamat datang di sudut kecil saya di internet — tempat bait-bait yang belum selesai dan gambar yang belum diberi judul menemukan rumahnya.",
+    heroKutipan     : "“Kadang satu kata cukup untuk menahan sebuah pagi.”",
+    tentangJudul    : "Perempuan yang mencatat langit",
+    tentangSub      : "sejak 2018",
+    profilSapaan    : "Halo, saya Rani.",
+    profilBio       : "Saya penulis puisi dan kreator gambar yang percaya bahwa kesunyian adalah bahasa paling jujur. Sebagian besar karya saya lahir dari perjalanan pulang yang terlalu lama, dari piring cuci yang belum selesai, dan dari percakapan yang berhenti di tengah kalimat. Selain menulis, saya melukis dengan tinta dan cat air — dua kebiasaan yang ternyata saling mengisi: satu menggambar bentuk, satu menggambar rasa.",
+    sambutan        : "Terima kasih sudah mampir. Bolehlah puisi-puisi ini dijadikan teman menunggu — asal jangan dijadikan alasan untuk berhenti menulis versi Anda sendiri.",
+    sambutanPenanda : "— Rani Aksara",
+    /* angka kecil di bawah foto profil */
+    statistik: [
+      { angka: "120+", label: "Puisi" },
+      { angka: "3",    label: "Antologi" },
+      { angka: "8 th", label: "Berkarya" }
+    ],
+    /* kartu fakta singkat */
+    fakta: [
+      { judul: "Fokus", isi: "Puisi liris, cat air, dan tipografi eksperimen." },
+      { judul: "Tersedia", isi: "Kolaborasi zine, ilustrasi, dan pembacaan puisi." },
+      { judul: "Perkakas", isi: "Buku catatan kertas berat, tinta India, Procreate." },
+      { judul: "Bahasa", isi: "Indonesia, sedikit Inggris, banyak diam." }
+    ]
+  },
+
+  /* ---------- 2. GALERI PUISI ----------
+     Cara menambah puisi baru: salin seluruh blok { ... } (mulai tanda { sampai }),
+     tempel di bawahnya, lalu ubah isinya. Jangan lupa koma antar blok.
+     • "tag"   : dipakai untuk tombol filter. Pakai tag yang sama agar dikelompokkan.
+     • "bait"  : array berisi array. Setiap array dalam = satu bait.
+                 Setiap teks dalam = satu baris. Contoh 2 bait × 2 baris:
+                 bait: [ ["baris1","baris2"], ["baris3","baris4"] ]
+     • "cover" : gambar kecil pada kartu (boleh dikosongkan: "" )                */
+  puisi: [
+    {
+      id       : "puisi-01",
+      judul    : "Arah yang Tak Pernah Pulang",
+      tanggal  : "12 Januari 2026",
+      tag      : "Rindu",
+      ringkasan: "Tentang jarak yang dilalui kereta dan kalimat yang tak sempat diucap.",
+      cover    : "https://images.pexels.com/photos/6980859/pexels-photo-6980859.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=600",
+      bait: [
+        [ "Ada peta yang kusimpan di saku jaket,",
+          "kusudutkan agar tidak terlipat dua.",
+          "Namun jalan tetap menemukan caranya",
+          "untuk menjadi jarak." ],
+        [ "Aku menghitung tiang listrik seperti orang",
+          "menghitung alasan untuk tidak menoleh.",
+          "Satu, dua, tiga — semuanya bernama kamu,",
+          "dan semuanya tak menyapa." ],
+        [ "Jika suatu hari kereta ini berhenti lebih dulu,",
+          "tolong katakan pada pagi:",
+          "bahwa aku pernah mencoba pulang,",
+          "hanya saja arahnya lupa membawa namamu." ]
+      ]
+    },
+    {
+      id       : "puisi-02",
+      judul    : "Cat Air untuk Ayah",
+      tanggal  : "3 November 2025",
+      tag      : "Keluarga",
+      ringkasan: "Menggambar seseorang dengan warna yang tidak pernah kita lihat utuh.",
+      cover    : "https://images.pexels.com/photos/7859016/pexels-photo-7859016.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=600",
+      bait: [
+        [ "Aku belajar mencampur warna dari tanganmu:",
+          "biru yang lelah, kuning yang sabar,",
+          "dan putih yang selalu kamu bilang bukan warna." ],
+        [ "Di atas kertas, kau jadi kabut yang rapi.",
+          "Aku tak berani mewarnai wajahmu terlalu tebal",
+          "takut nanti terlihat betapa sering aku merindu." ],
+        [ "Lukisan ini kutitipkan di ruang tamu.",
+          "Bilang saja itu pemandangan.",
+          "Kita berdua tahu, langit memang jarang pulang." ]
+      ]
+    },
+    {
+      id       : "puisi-03",
+      judul    : "Inventaris Hujan",
+      tanggal  : "19 Agustus 2025",
+      tag      : "Kota",
+      ringkasan: "Menghitung hal-hal yang basah di sebuah kota yang terburu-buru.",
+      cover    : "https://images.pexels.com/photos/9175904/pexels-photo-9175904.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=600",
+      bait: [
+        [ "Hari ini kota mencatat: tiga payung patah,",
+          "satu sepatu bernyanyi di genangan,",
+          "dan seorang perempuan membaca puisi",
+          "di halte tanpa menyalakannya." ],
+        [ "Aku salah satu dari hal-hal yang basah itu.",
+          "Basah karena menunggu, basah karena pulang,",
+          "basah karena kata yang kutahan di tenggorokan",
+          "akhirnya jatuh juga sebagai gerimis." ],
+        [ "Besok langit akan mengaku lupa.",
+          "Tapi aku sudah menyalin semuanya",
+          "ke halaman yang tidak akan kutunjuk ke siapa pun." ]
+      ]
+    },
+    {
+      id       : "puisi-04",
+      judul    : "Latihan Menjadi Sunyi",
+      tanggal  : "27 Mei 2025",
+      tag      : "Intropeksi",
+      ringkasan: "Puisi tentang belajar diam tanpa kehilangan suara.",
+      cover    : "https://images.pexels.com/photos/24989202/pexels-photo-24989202.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=600",
+      bait: [
+        [ "Pagi ini aku mematikan semua nama.",
+          "Telepon, jendela, dan kebiasaan menjelaskan.",
+          "Aku hanya ingin tahu bagaimana rasanya",
+          "menjadi ruangan kosong yang tetap dihuni cahaya." ],
+        [ "Ternyata sunyi bukan ketiadaan kata.",
+          "Ia adalah kata yang sudah selesai,",
+          "diletakkan dengan rapi di rak,",
+          "tidak lagi diminta cerita." ],
+        [ "Dan aku menemukan diriku di sana:",
+          "tenang, sederhana,",
+          "cukup satu kata untuk seluruh hari." ]
+      ]
+    },
+    {
+      id       : "puisi-05",
+      judul    : "Surat untuk Zine yang Belum Jadi",
+      tanggal  : "8 Februari 2025",
+      tag      : "Karya",
+      ringkasan: "Tentang rencana kecil yang selalu tertunda dengan cara paling manis.",
+      cover    : "https://images.pexels.com/photos/6980355/pexels-photo-6980355.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=600",
+      bait: [
+        [ "Aku sudah menggambar sampulmu tiga kali,",
+          "dan tiga kali juga kau menyarankanku untuk sabar.",
+          "Zine kesayangan, kau memang pandai menunda." ],
+        [ "Mungkin karya terbaik memang lahir dua kali:",
+          "sekali di kepala yang berani,",
+          "sekali di tangan yang tidak tidur." ],
+        [ "Minggu depan, kataku, minggu depan.",
+          "Dan minggu depan pun menjawab:",
+          "aku akan datang membawa tinta segar." ]
+      ]
+    },
+    {
+      id       : "puisi-06",
+      judul    : "Kita Hanya Bertukar Cahaya",
+      tanggal  : "14 Desember 2024",
+      tag      : "Rindu",
+      ringkasan: "Puisi cinta yang tidak berani menyebut kata cinta.",
+      cover    : "https://images.pexels.com/photos/15062246/pexels-photo-15062246.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=900&w=600",
+      bait: [
+        [ "Tidak ada pernyataan hari itu,",
+          "hanya dua cangkir dan jendela yang kompromi",
+          "soal berapa banyak matahari yang boleh masuk." ],
+        [ "Kita bicara tentang hujan, tentang harga beras,",
+          "tentang orang asing yang tidur di stasiun.",
+          "Sementara hati kita diam-diam meminjam bahasa lain." ],
+        [ "Kalau nanti kau tanya apa yang terjadi,",
+          "jawab saja: kita hanya bertukar cahaya.",
+          "Sisanya biar jadi puisi yang tidak kita kirim." ]
+      ]
+    }
+  ],
+
+  /* ---------- 3. GALERI GAMBAR ----------
+     • url        : gambar versi besar (ditampilkan saat diklik)
+     • thumbnail  : (opsional) versi kecil. Kosongkan "" bila tidak ada,
+                    maka url di atas yang dipakai.
+     • rasio      : "3/4" (tinggi), "1/1" (kotak), "4/3" (lebar), "" (bebas)
+     • judul/deskripsi : tampil di bawah gambar pada lightbox            */
+  galeri: [
+    {
+      id: "gbr-01",
+      judul: "Tinta Terlarut",
+      deskripsi: "Tinta India di atas kertas paes 300 gsm. Bagian dari seri “Sunyi yang Berbentuk”, 2025.",
+      url: "https://images.pexels.com/photos/9175904/pexels-photo-9175904.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1200",
+      thumbnail: "https://images.pexels.com/photos/9175904/pexels-photo-9175904.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=800&w=600",
+      rasio: "3/4"
+    },
+    {
+      id: "gbr-02",
+      judul: "Tekstur Abu",
+      deskripsi: "Eksperimen cat air monokrom. Digambar sambil mendengarkan hujan sekitar pukul lima sore.",
+      url: "https://images.pexels.com/photos/9176003/pexels-photo-9176003.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1200",
+      thumbnail: "https://images.pexels.com/photos/9176003/pexels-photo-9176003.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=800&w=800",
+      rasio: "1/1"
+    },
+    {
+      id: "gbr-03",
+      judul: "Noda Biru",
+      deskripsi: "Tinta biru yang mengembang bebas. Series kecil untuk sampul zine yang belum selesai.",
+      url: "https://images.pexels.com/photos/24989202/pexels-photo-24989202.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1200",
+      thumbnail: "https://images.pexels.com/photos/24989202/pexels-photo-24989202.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=800&w=600",
+      rasio: "3/4"
+    },
+    {
+      id: "gbr-04",
+      judul: "Arus Warna",
+      deskripsi: "Cat akrilik dibiarkan mengalir tanpa kuas. Judul kerja: “Yang Tidak Kita Atur”.",
+      url: "https://images.pexels.com/photos/36040774/pexels-photo-36040774.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1200",
+      thumbnail: "https://images.pexels.com/photos/36040774/pexels-photo-36040774.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=800&w=1200",
+      rasio: "4/3"
+    },
+    {
+      id: "gbr-05",
+      judul: "Turkis & Emas",
+      deskripsi: "Cat air dengan aksen emas. Karya favorit dari pameran kecil tahun lalu.",
+      url: "https://images.pexels.com/photos/15062246/pexels-photo-15062246.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1200",
+      thumbnail: "https://images.pexels.com/photos/15062246/pexels-photo-15062246.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=800&w=600",
+      rasio: "3/4"
+    },
+    {
+      id: "gbr-06",
+      judul: "Senja Lembap",
+      deskripsi: "Gradasi halus dalam nuansa hangat. Dipakai sebagai latar antologi puisi kedua.",
+      url: "https://images.pexels.com/photos/7859016/pexels-photo-7859016.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=900&w=1200",
+      thumbnail: "https://images.pexels.com/photos/7859016/pexels-photo-7859016.jpeg?auto=compress&cs=tinysrgb&fit=crop&h=800&w=800",
+      rasio: "1/1"
+    }
+  ],
+
+  /* ---------- 4. KONTAK & MEDIA SOSIAL ----------
+     • formEndpoint : kosongkan ("") agar form membuka aplikasi email (mailto).
+                      Atau isi dengan endpoint Formspree gratis, contoh:
+                      "https://formspree.io/f/abcdwxyz"
+     • email        : alamat email Anda (dipakai untuk tombol & mailto)          */
+  kontak: {
+    email        : "halo@raniaksara.id",
+    judulForm    : "Kirim Pesan",
+    catatanForm  : "Form ini siap dipakai. Isi SITE.kontak.formEndpoint dengan endpoint Formspree agar pesan terkirim otomatis.",
+    deskripsi    : "Untuk undangan pembacaan puisi, kolaborasi zine, pemesanan ilustrasi, atau sekadar berbagi bait favorit Anda — silakan tulis pesan.",
+    formEndpoint : "",
+    sosial: [
+      { nama: "Instagram", handle: "@rani.aksara",  url: "https://instagram.com/",            ikon: "IG" },
+      { nama: "X (Twitter)", handle: "@raniaksara", url: "https://x.com/",                    ikon: "X"  },
+      { nama: "Email",       handle: "halo@raniaksara.id", url: "mailto:halo@raniaksara.id",    ikon: "@"  },
+      { nama: "Wattpad",     handle: "raniaksara",  url: "https://www.wattpad.com/",          ikon: "W"  }
+    ]
+  },
+
+  /* ---------- 5. FOOTER ---------- */
+  footer: {
+    catatan : "Menulis dari Bandung, mengirim bait ke mana-mana.",
+    credit  : "© {tahun} Rani Aksara. Seluruh puisi dan gambar dilindungi hak cipta."
+  }
+};
+
+/* ==================================================================================
+   ★★★  SELESAI BAGIAN EDIT — KODE DI BAWAH INI TIDAK PERLU DIUBAH  ★★★
+   ================================================================================== */
+
+/* ---------- util kecil ---------- */
+const $  = (s, p = document) => p.querySelector(s);
+const $$ = (s, p = document) => Array.from(p.querySelectorAll(s));
+const esc = (t = "") => String(t).replace(/[&<>"']/g, c => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[c]));
+const nl2br = t => esc(t).replace(/\n/g, "<br>");
+const FALLBACK = "https://placehold.co/800x1000/e8e3d9/8a8378?text=Gambar+Anda";
+const imgTag = (src, cls, alt = "") => `<img src="${esc(src || FALLBACK)}" alt="${esc(alt)}" loading="lazy" class="${cls}" onerror="this.onerror=null;this.src='${FALLBACK}'">`;
+
+/* ---------- bind teks sederhana ke elemen [data-bind] ---------- */
+const BIND = {
+  nama: SITE.profil.nama,
+  heroKicker: SITE.profil.heroKicker,
+  heroBaris1: SITE.profil.heroBaris1,
+  heroBaris2: SITE.profil.heroBaris2,
+  heroDeskripsi: SITE.profil.heroDeskripsi,
+  heroKutipan: SITE.profil.heroKutipan,
+  tentangJudul: SITE.profil.tentangJudul,
+  tentangSub: SITE.profil.tentangSub,
+  profilSapaan: SITE.profil.profilSapaan,
+  profilBio: SITE.profil.profilBio,
+  sambutan: SITE.profil.sambutan,
+  sambutanPenanda: SITE.profil.sambutanPenanda,
+  kontakDeskripsi: SITE.kontak.deskripsi,
+  footerNote: SITE.footer.catatan
+};
+$$("[data-bind]").forEach(el => { const v = BIND[el.dataset.bind]; if (v != null) el.innerHTML = nl2br(v); });
+$("#hero-photo").src = SITE.profil.fotoHero || FALLBACK;
+$("#profil-photo").src = SITE.profil.fotoProfil || FALLBACK;
+
+/* statistik */
+$("#stat-wrap").innerHTML = SITE.profil.statistik.map(s => `
+  <div class="border border-line rounded-xl py-3">
+    <p class="font-display text-2xl text-accent">${esc(s.angka)}</p>
+    <p class="text-[10px] uppercase tracking-[0.18em] text-soft mt-1">${esc(s.label)}</p>
+  </div>`).join("");
+
+/* fakta */
+$("#fakta-wrap").innerHTML = SITE.profil.fakta.map(f => `
+  <div class="bg-panel border border-line rounded-2xl p-5">
+    <p class="text-[10px] uppercase tracking-[0.22em] text-accent mb-2">${esc(f.judul)}</p>
+    <p class="text-sm text-soft leading-relaxed">${esc(f.isi)}</p>
+  </div>`).join("");
+
+/* ---------- tahun & copyright ---------- */
+$("#copyright").textContent = SITE.footer.credit.replace("{tahun}", new Date().getFullYear());
+
+/* ---------- sosial media ---------- */
+$("#sosial-wrap").innerHTML = SITE.kontak.sosial.map(s => `
+  <a href="${esc(s.url)}" target="_blank" rel="noopener"
+     class="group flex items-center gap-4 border border-line rounded-2xl px-5 py-4 hover:border-accent transition">
+    <span class="h-10 w-10 shrink-0 grid place-items-center rounded-full border border-line font-display text-accent group-hover:bg-accent group-hover:text-white transition">${esc(s.ikon)}</span>
+    <span class="flex-1 min-w-0">
+      <span class="block text-[10px] uppercase tracking-[0.22em] text-soft">${esc(s.nama)}</span>
+      <span class="block text-sm truncate">${esc(s.handle)}</span>
+    </span>
+    <span class="text-soft group-hover:text-accent transition">↗</span>
+  </a>`).join("");
+$("#form-catatan").textContent = SITE.kontak.catatanForm;
+
+/* ==================================================================================
+   TEMA GELAP / TERANG
+   ================================================================================== */
+const root = document.documentElement;
+const setTheme = (dark, save = true) => {
+  root.classList.toggle("dark", dark);
+  const ico = dark ? "☀" : "☾";
+  $("#theme-icon").textContent = ico;
+  $$(".theme-icon-m").forEach(e => e.textContent = ico);
+  if (save) localStorage.setItem("tema", dark ? "gelap" : "terang");
+};
+setTheme((localStorage.getItem("tema") || (window.matchMedia("(prefers-color-scheme: dark)").matches ? "gelap" : "terang")) === "gelap", false);
+$("#theme-toggle").onclick = () => setTheme(!root.classList.contains("dark"));
+$("#theme-toggle-m").onclick = () => setTheme(!root.classList.contains("dark"));
+
+/* ==================================================================================
+   HEADER: efek scroll + nav aktif
+   ================================================================================== */
+const headerInner = $("#header-inner");
+const onScroll = () => headerInner.classList.toggle("header-scrolled", window.scrollY > 24);
+window.addEventListener("scroll", onScroll, { passive: true }); onScroll();
+
+const navLinks = $$(".nav-link");
+const sections = ["tentang", "puisi", "galeri", "kontak"].map(id => $("#" + id)).filter(Boolean);
+const navObs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      navLinks.forEach(l => l.classList.toggle("active", l.getAttribute("href") === "#" + e.target.id));
+    }
+  });
+}, { rootMargin: "-45% 0px -50% 0px" });
+sections.forEach(s => navObs.observe(s));
+
+/* menu mobile */
+const menu = $("#mobile-menu");
+const openMenu = v => { menu.classList.toggle("hidden", !v); document.body.style.overflow = v ? "hidden" : ""; };
+$("#menu-btn").onclick = () => openMenu(true);
+$$("[data-close-menu], .mobile-link").forEach(el => el.onclick = () => openMenu(false));
+
+/* animasi reveal */
+const revObs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("is-visible"); revObs.unobserve(e.target); } }), { threshold: .12 });
+$$(".reveal").forEach(el => revObs.observe(el));
+
+/* ==================================================================================
+   GALERI PUISI — kartu, filter, pencarian, modal
+   ================================================================================== */
+const gridPuisi = $("#puisi-grid");
+let filterAktif = "Semua";
+let kataKunci = "";
+
+/* buat tombol tag otomatis dari data */
+const tags = ["Semua", ...new Set(SITE.puisi.map(p => p.tag).filter(Boolean))];
+$("#tag-wrap").innerHTML = tags.map((t, i) => `
+  <button class="tag-btn px-4 py-2 rounded-full border border-line text-[11px] uppercase tracking-[0.18em] transition ${i === 0 ? "bg-accent text-white border-transparent" : "hover:border-accent hover:text-accent"}" data-tag="${esc(t)}">${esc(t)}</button>
+`).join("");
+
+function renderPuisi() {
+  const list = SITE.puisi.filter(p => {
+    const okTag = filterAktif === "Semua" || p.tag === filterAktif;
+    const q = kataKunci.trim().toLowerCase();
+    const okQ = !q || (p.judul + " " + p.ringkasan + " " + (p.bait || []).flat().join(" ")).toLowerCase().includes(q);
+    return okTag && okQ;
+  });
+
+  $("#puisi-kosong").classList.toggle("hidden", list.length > 0);
+
+  gridPuisi.innerHTML = list.map((p, i) => `
+    <article class="poem-card group cursor-pointer bg-panel border border-line rounded-[1.25rem] overflow-hidden flex flex-col fade-in"
+             data-id="${esc(p.id)}" style="animation-delay:${i * 60}ms">
+      <div class="relative h-44 sm:h-48 overflow-hidden">
+        ${imgTag(p.cover, "poem-cover w-full h-full object-cover", p.judul)}
+        <span class="absolute top-3 left-3 px-3 py-1.5 rounded-full bg-black/45 backdrop-blur text-white text-[10px] uppercase tracking-[0.18em]">${esc(p.tag || "Puisi")}</span>
+      </div>
+      <div class="p-6 flex flex-col flex-1">
+        <p class="text-[10px] uppercase tracking-[0.2em] text-soft">${esc(p.tanggal || "")}</p>
+        <h3 class="font-display text-2xl mt-2 leading-snug group-hover:text-accent transition">${esc(p.judul)}</h3>
+        <p class="text-sm text-soft leading-relaxed mt-3 line-clamp-3">${esc(p.ringkasan || "")}</p>
+        <div class="mt-auto pt-5 flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-accent">
+          Baca Puisi <span class="group-hover:translate-x-1 transition inline-block">→</span>
+        </div>
+      </div>
+    </article>`).join("");
+
+  $$(".poem-card", gridPuisi).forEach(card => card.onclick = () => bukaPuisi(card.dataset.id));
+}
+
+$$(".tag-btn").forEach(btn => btn.onclick = () => {
+  filterAktif = btn.dataset.tag;
+  $$(".tag-btn").forEach(b => {
+    const on = b === btn;
+    b.className = `tag-btn px-4 py-2 rounded-full border text-[11px] uppercase tracking-[0.18em] transition ${on ? "bg-accent text-white border-transparent" : "border-line hover:border-accent hover:text-accent"}`;
+  });
+  renderPuisi();
+});
+$("#search-puisi").addEventListener("input", e => { kataKunci = e.target.value; renderPuisi(); });
+renderPuisi();
+
+/* ---------- modal puisi ---------- */
+const modal = $("#modal-puisi");
+let puisiAktif = null;
+
+function bukaPuisi(id) {
+  const p = SITE.puisi.find(x => x.id === id); if (!p) return;
+  puisiAktif = p;
+  $("#modal-cover").src = p.cover || FALLBACK;
+  $("#modal-meta").textContent = `${p.tag || "Puisi"} · ${p.tanggal || ""}`;
+  $("#modal-judul").textContent = p.judul;
+  $("#modal-isi").innerHTML = (p.bait || []).map(bait =>
+    `<div class="bait">${bait.map(baris => `<p>${esc(baris)}</p>`).join("")}</div>`
+  ).join("");
+  $("#modal-penutup").textContent = SITE.profil.nama + " · " + (p.tanggal || "");
+  modal.classList.remove("hidden");
+  document.body.style.overflow = "hidden";
+}
+function tutupPuisi() { modal.classList.add("hidden"); document.body.style.overflow = ""; }
+$$("[data-close-modal]", modal).forEach(el => el.onclick = tutupPuisi);
+$("#btn-salin").onclick = async () => {
+  if (!puisiAktif) return;
+  const teks = `${puisiAktif.judul}\n${SITE.profil.nama}\n\n` + puisiAktif.bait.map(b => b.join("\n")).join("\n\n");
+  try { await navigator.clipboard.writeText(teks); $("#btn-salin").textContent = "Tersalin ✓"; }
+  catch { $("#btn-salin").textContent = "Gagal ✕"; }
+  setTimeout(() => $("#btn-salin").textContent = "Salin", 1800);
+};
+
+/* ==================================================================================
+   GALERI GAMBAR — grid + lightbox
+   ================================================================================== */
+$("#galeri-grid").innerHTML = SITE.galeri.map((g, i) => {
+  const src = g.thumbnail || g.url || FALLBACK;
+  const span = g.rasio === "4/3" ? "col-span-2" : "";
+  return `
+  <figure class="art-item group relative overflow-hidden rounded-2xl cursor-pointer ring-line ${span} fade-in"
+          data-index="${i}" style="animation-delay:${i * 70}ms">
+    <div class="w-full ${g.rasio ? "" : "aspect-[3/4]"}" style="${g.rasio ? "aspect-ratio:" + g.rasio : ""}">
+      ${imgTag(src, "w-full h-full object-cover", g.judul)}
+    </div>
+    <figcaption class="absolute inset-x-0 bottom-0 p-5 pt-14 text-white opacity-0 group-hover:opacity-100 transition duration-500"
+                style="background:linear-gradient(to top,rgba(0,0,0,.78),transparent)">
+      <p class="font-display text-xl leading-tight">${esc(g.judul)}</p>
+      <p class="text-[11px] uppercase tracking-[0.2em] text-white/70 mt-1">Klik untuk memperbesar</p>
+    </figcaption>
+  </figure>`;
+}).join("");
+
+const lb = $("#lightbox");
+let idxGaleri = 0;
+
+function tampilLightbox(i) {
+  if (!SITE.galeri.length) return;
+  idxGaleri = (i + SITE.galeri.length) % SITE.galeri.length;
+  const g = SITE.galeri[idxGaleri];
+  const img = $("#lb-img");
+  img.classList.remove("fade-in"); void img.offsetWidth; img.classList.add("fade-in");
+  img.src = g.url || g.thumbnail || FALLBACK;
+  img.alt = g.judul || "";
+  $("#lb-judul").textContent = g.judul || "";
+  $("#lb-deskripsi").textContent = g.deskripsi || "";
+  $("#lb-counter").textContent = `${idxGaleri + 1} / ${SITE.galeri.length}`;
+}
+function bukaLightbox(i) { tampilLightbox(i); lb.classList.remove("hidden"); document.body.style.overflow = "hidden"; }
+function tutupLightbox() { lb.classList.add("hidden"); document.body.style.overflow = ""; }
+
+$$(".art-item").forEach(el => el.onclick = () => bukaLightbox(+el.dataset.index));
+$("#lb-prev").onclick = e => { e.stopPropagation(); tampilLightbox(idxGaleri - 1); };
+$("#lb-next").onclick = e => { e.stopPropagation(); tampilLightbox(idxGaleri + 1); };
+$$("[data-close-lightbox]").forEach(el => el.onclick = tutupLightbox);
+
+/* navigasi keyboard global */
+document.addEventListener("keydown", e => {
+  if (!lb.classList.contains("hidden")) {
+    if (e.key === "Escape") tutupLightbox();
+    if (e.key === "ArrowLeft") tampilLightbox(idxGaleri - 1);
+    if (e.key === "ArrowRight") tampilLightbox(idxGaleri + 1);
+  } else if (!modal.classList.contains("hidden")) {
+    if (e.key === "Escape") tutupPuisi();
+  }
+});
+
+/* ==================================================================================
+   FORM KONTAK
+   - Jika SITE.kontak.formEndpoint diisi (mis. Formspree) → pesan dikirim via fetch.
+   - Jika kosong → otomatis membuka aplikasi email dengan isi pesan.
+   ================================================================================== */
+$("#contact-form").addEventListener("submit", async e => {
+  e.preventDefault();
+  const f = e.target, status = $("#form-status");
+  const data = {
+    nama: f.nama.value.trim(), email: f.email.value.trim(),
+    subjek: f.subjek.value.trim(), pesan: f.pesan.value.trim()
+  };
+  if (!data.nama || !data.email || !data.pesan) {
+    status.textContent = "Mohon lengkapi nama, email, dan pesan.";
+    status.style.color = "#c0533b"; return;
+  }
+  status.textContent = "Mengirim…"; status.style.color = "var(--ink-soft)";
+
+  const endpoint = (SITE.kontak.formEndpoint || "").trim();
+  if (endpoint) {
+    try {
+      const res = await fetch(endpoint, {
+        method: "POST", headers: { "Accept": "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify({ nama: data.nama, email: data.email, _subject: data.subjek || "Pesan dari website", message: data.pesan })
+      });
+      if (res.ok) { status.textContent = "Terima kasih! Pesan Anda sudah terkirim."; status.style.color = "var(--accent)"; f.reset(); }
+      else { status.textContent = "Gagal mengirim. Coba email langsung ya."; status.style.color = "#c0533b"; }
+    } catch { status.textContent = "Gagal mengirim. Coba email langsung ya."; status.style.color = "#c0533b"; }
+  } else {
+    const body = encodeURIComponent(`${data.pesan}\n\n— ${data.nama} (${data.email})`);
+    window.location.href = `mailto:${SITE.kontak.email}?subject=${encodeURIComponent(data.subjek || "Pesan dari website portofolio")}&body=${body}`;
+    status.textContent = "Aplikasi email Anda akan terbuka.";
+    status.style.color = "var(--accent)";
+  }
+});
+
+/* inisial pada lingkaran logo header (diambil huruf pertama nama) */
+const logoInisial = $("#logo-inisial");
+if (logoInisial) logoInisial.textContent = (SITE.profil.nama.trim()[0] || "A").toUpperCase();
+</script>
+</body>
+</html>
